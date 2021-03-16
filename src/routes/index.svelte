@@ -1,11 +1,28 @@
+<script lang="ts" context="module">
+	export async function load({ page, fetch, session, context }) {
+		const res = await fetch('/info')
+		if (res.ok) {
+			return { props: { data: await res.json() } }
+		}
+	}
+</script>
+
 <script lang="ts">
 	import Counter from '$lib/Counter.svelte';
+	import type { Systeminformation } from 'systeminformation';
+
+	export let data: Systeminformation.FsSizeData[];
+	console.log(data)
 </script>
 
 <main>
 	<h1>Hello world!</h1>
 
 	<Counter />
+
+	{#each data as fs}
+		<li>{fs.fs}: {fs.available} / {fs.size} = {fs.available / fs.size * 100}%</li>
+	{/each}
 
 	<p>Visit <a href="https://svelte.dev">svelte.dev</a> to learn how to build Svelte apps.</p>
 </main>
